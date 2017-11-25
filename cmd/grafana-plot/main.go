@@ -20,8 +20,8 @@ import (
 var (
 	addr      = flag.String("addr", "http://127.0.0.1:9090", "Prometheus address")
 	pointTime = flags.UnixTime("t", time.Now(), "Query time")
-	offset    = flag.Duration("offset", time.Hour, "Query time offset, the time range is [time - offset, time]")
-	step      = flag.Duration("step", 15*time.Second, "Query step")
+	offset    = flags.Duration("offset", time.Hour, "Query time offset, the time range is [time - offset, time]")
+	step      = flags.Duration("step", 15*time.Second, "Query step")
 	output    = flag.String("output", "./var", "Output dir")
 	format    = flag.String("format", "png", "Output format")
 	jsonFile  = flag.String("f", "", "Grafana JSON config file")
