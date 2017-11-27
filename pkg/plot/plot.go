@@ -95,16 +95,16 @@ func Plot(metrics model.Matrix, title, format string) (io.WriterTo, error) {
 
 // PlotFile plots the metric and write to file
 func PlotFile(metrics model.Matrix, title string, format string, name string) error {
+	w, err := Plot(metrics, title, format)
+	if err != nil {
+		return err
+	}
+
 	f, err := os.OpenFile(name, os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		return err
 	}
 	defer f.Close()
-
-	w, err := Plot(metrics, title, format)
-	if err != nil {
-		return err
-	}
 
 	if _, err = w.WriteTo(f); err != nil {
 		return err
