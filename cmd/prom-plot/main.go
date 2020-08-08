@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/prometheus/common/model"
+
 	"github.com/siddontang/prom-plot/pkg/flags"
 	"github.com/siddontang/prom-plot/pkg/plot"
 	"github.com/siddontang/prom-plot/pkg/prom"
@@ -33,7 +34,7 @@ func main() {
 
 	startTime, endTime := (*pointTime).Add(-*offset), *pointTime
 
-	v, err := c.Query(context.Background(), *query, startTime, endTime, *step)
+	v, _, err := c.Query(context.Background(), *query, startTime, endTime, *step)
 	if err != nil {
 		panic(err)
 	}
@@ -47,8 +48,7 @@ func main() {
 		*output = fmt.Sprintf("%s.%s", *title, *format)
 	}
 
-	plot.PlotFile(m, *title, *format, *output)
-	if err != nil {
+	if err := plot.PlotFile(m, *title, *format, *output); err != nil {
 		panic(err)
 	}
 }

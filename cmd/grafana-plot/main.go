@@ -4,12 +4,14 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"regexp"
 	"strings"
 	"time"
 
 	"github.com/prometheus/common/model"
+
 	"github.com/siddontang/prom-plot/pkg/plot"
 	"github.com/siddontang/prom-plot/pkg/prom"
 
@@ -29,8 +31,7 @@ var (
 
 func perr(err error) {
 	if err != nil {
-		println(err.Error())
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
@@ -64,7 +65,7 @@ func main() {
 	for _, row := range cfg.Rows {
 		rows := getRepeatRows(row.Title, row.Repeat, labelValues)
 		if rows == nil {
-			rows = model.LabelValues{model.LabelValue("")}
+			rows = model.LabelValues{""}
 		}
 
 		for _, r := range rows {
@@ -77,7 +78,7 @@ func main() {
 				var matrix model.Matrix
 				for _, expr := range panel.Targets {
 					query := replaceQueryLabelValues(expr.Expr, row.Repeat, string(r))
-					v, err := client.Query(ctx, query, startTime, endTime, *step)
+					v, _, err := client.Query(ctx, query, startTime, endTime, *step)
 					if err != nil {
 						perr(fmt.Errorf("query %s failed %v", query, err))
 					}

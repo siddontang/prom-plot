@@ -1,8 +1,10 @@
 package grafana
 
-import "encoding/json"
-import "io/ioutil"
-import "strings"
+import (
+	"encoding/json"
+	"io/ioutil"
+	"strings"
+)
 
 // PanelConfig is for panel of the row.
 type PanelConfig struct {

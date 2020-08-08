@@ -20,25 +20,22 @@ func NewClient(addr string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	api := v1.NewAPI(c)
-
-	return &Client{api: api}, nil
+	return &Client{api: v1.NewAPI(c)}, nil
 }
 
 // Query queries the metric from start to end time with step.
-func (c *Client) Query(ctx context.Context, query string, startTime time.Time, endTime time.Time, step time.Duration) (model.Value, error) {
+func (c *Client) Query(ctx context.Context, query string, startTime time.Time, endTime time.Time, step time.Duration) (model.Value, v1.Warnings, error) {
 	return c.api.QueryRange(ctx, query, v1.Range{Start: startTime, End: endTime, Step: step})
 }
 
 // Series finds series by label matchers.
-func (c *Client) Series(ctx context.Context, matches []string, startTime time.Time, endTime time.Time) ([]model.LabelSet, error) {
+func (c *Client) Series(ctx context.Context, matches []string, startTime time.Time, endTime time.Time) ([]model.LabelSet, v1.Warnings, error) {
 	return c.api.Series(ctx, matches, startTime, endTime)
 }
 
 // LabelValues returns all the values for the label by the matchers
 func (c *Client) LabelValues(ctx context.Context, matcher string, label string, startTime time.Time, endTime time.Time) (model.LabelValues, error) {
-	set, err := c.Series(ctx, []string{matcher}, startTime, endTime)
+	set, _, err := c.Series(ctx, []string{matcher}, startTime, endTime)
 	if err != nil {
 		return nil, err
 	}
