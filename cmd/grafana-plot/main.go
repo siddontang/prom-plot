@@ -65,7 +65,7 @@ func main() {
 	for _, row := range cfg.Rows {
 		rows := getRepeatRows(row.Title, row.Repeat, labelValues)
 		if rows == nil {
-			rows = model.LabelValues{model.LabelValue("")}
+			rows = model.LabelValues{""}
 		}
 
 		for _, r := range rows {
