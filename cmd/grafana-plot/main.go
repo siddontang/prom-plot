@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"log"
 	"os"
 	"regexp"
 	"strings"
@@ -30,8 +31,7 @@ var (
 
 func perr(err error) {
 	if err != nil {
-		println(err.Error())
-		os.Exit(1)
+		log.Fatal(err)
 	}
 }
 
