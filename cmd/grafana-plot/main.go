@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/prometheus/common/model"
+
 	"github.com/siddontang/prom-plot/pkg/plot"
 	"github.com/siddontang/prom-plot/pkg/prom"
 
@@ -77,7 +78,7 @@ func main() {
 				var matrix model.Matrix
 				for _, expr := range panel.Targets {
 					query := replaceQueryLabelValues(expr.Expr, row.Repeat, string(r))
-					v, err := client.Query(ctx, query, startTime, endTime, *step)
+					v, _, err := client.Query(ctx, query, startTime, endTime, *step)
 					if err != nil {
 						perr(fmt.Errorf("query %s failed %v", query, err))
 					}
